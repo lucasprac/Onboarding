@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model OnboardingResponse {
+  id           String   @id @default(cuid())
+  surveyType   String   // "3days", "15days", "30days"
+  office       String   // "sede1", "sede2", "sede3"
+  position     String   // "cargo1", "cargo2", "cargo3"
+  responses    Json     // Store all survey responses as JSON
+  createdAt    DateTime @default(now())
+  
+  @@map("onboarding_responses")
+}
+
+model SurveyQuestion {
+  id          String   @id @default(cuid())
+  surveyType  String   // "3days", "15days", "30days"
+  questionText String
+  questionType String  // "likert5", "likert11", "text"
+  order       Int
+  createdAt   DateTime @default(now())
+  
+  @@map("survey_questions")
+}
